@@ -117,12 +117,15 @@ flowchart LR
 
 | Camada | Tecnologia | Uso |
 |--------|-----------|-----|
-| Linguagem | Python 3.10+ | Scripts CLI |
-| HTTP | `requests` | OpenCNPJ, download RF |
-| DB | `duckdb` | Query local analítica |
-| Concorrência | `concurrent.futures.ThreadPoolExecutor` | Downloads + crawl paralelo |
+| **Linguagem** | **Python 3.10+ (100%)** | Scripts CLI, 1.459 linhas (`buscador_importadores.py:1`, `site_contacts.py:1`, `auth/*.py:1`) |
+| HTTP | `requests` + `urllib` (stdlib) | OpenCNPJ mock, download RF, crawl |
+| DB | `duckdb` 0.9+ | Query local analítica (sem servidor) |
+| Concorrência | `concurrent.futures.ThreadPoolExecutor` | Downloads (3 threads) + crawl (5 threads) |
+| Parsing | `html.parser`, `re`, `ssl` (stdlib) | Extração de e-mails, telefones, pessoas, redes |
 | Infra opcional | n8n + Docker | Orquestração webhook |
 | Dados | `api.exemplo.com` (mock) — configurável via `CNPJ_API_URL` / `DADOS_RF_URL` | Fonte |
+
+**Linguagens no repositório:** `Python` detectado pelo GitHub Linguist (todos os `src/*.py`), com `Shell` auxiliar (`curl|funzip|grep`) para streaming da base RF. Sem dependências não utilizadas.
 
 Apenas tecnologias efetivamente usadas — sem invenção.
 
