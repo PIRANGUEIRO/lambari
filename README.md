@@ -6,13 +6,30 @@
 
 ## Overview
 
-**Problema:** empresas de comércio exterior precisam descobrir novos importadores com perfil similar a clientes existentes, mas as bases públicas da Receita Federal (6.5GB, +50M estabelecimentos) são difíceis de filtrar e os sites das empresas não têm contato estruturado.
+### Contexto
 
-**Solução:** pipeline em duas etapas:
-1. **Buscador** (`buscador_importadores.py`) — calcula perfil (capital social médio + CNAE) de 3 CNPJs de referência via API mock (api.exemplo.com) e filtra a base RF local (DuckDB) por CNAE 46–50, UF PR/SC, situação ativa e faixa de capital ±70%.
-2. **Enriquecimento** (`site_contacts.py`) — crawl paralelo (sitemap + 50 páginas) extrai e-mails, telefones, pessoas, cargos, CNPJ e redes sociais do site de cada lead.
+Operações de comércio exterior em PR/SC dependem de prospecção B2B contínua, mas o mercado é fragmentado: importadores estão dispersos em contribuições CNAE 46–50, com portes e capitais muito distintos, e não existe uma base pronta de "empresas similares a meus melhores clientes". A Receita Federal publica a base completa (Estabelecimentos + Empresas, ~6.5GB compactado, +50M linhas), mas ela é intrinsecamente não filtrável: encoding ISO-8859-1, pipe-separated sem header, 10 arquivos .zip de ~540MB cada, e sem API oficial para queries por similaridade. Cruzar essa base manualmente é inviável, e mesmo encontrando CNPJs, falta o contato decisivo (e-mail, telefone, pessoa, LinkedIn) que normalmente está apenas disperso no site institucional.
 
-Orquestrado via **n8n workflow** (`bnsuP7NDtBvl8HU9`) exposto como webhook, alimentando o pipeline BotCotation → Google Sheets / RD Station CRM.
+### Problema
+
+Como, a partir de 3 CNPJs de referência (clientes ideais, concorrentes ou parceiros), gerar uma lista curta, ranqueada e acionável de importadores similares no mesmo território (PR/SC) e no mesmo perfil econômico (faixa de capital), já enriquecida com contatos extraídos automaticamente dos sites — de forma reprodutível, cacheável e integrável a CRM/Sheets sem trabalho manual?
+
+### Solução
+
+O **Lambari** resolve com um pipeline em duas etapas, desenhado para ser eficiente em disco/RAM e tolerante a falhas, orquestrado via **n8n workflow** (`bnsuP7NDtBvl8HU9` → `POST /webhook/buscador-importadores`) e alimentando o pipeline **BotCotation → Google Sheets / RD Station CRM**:
+
+**1. Buscador (`src/buscador_importadores.py:121`) — Similaridade por perfil econômico**
+- Consulta os 3 CNPJs de referência na API mock (`CNPJ_API_URL` → `https://api.exemplo.com/cnpj/{}`) e extrai `capital_social`, `cnae_principal`, `uf/município` e `porte`.
+- Calcula **perfil**: capital médio, faixa `0.3×–3.0×` (ajustável via `CAP_MIN_FATOR`/`CAP_MAX_FATOR`), e CNAE alvo (moda dos 2 dígitos).
+- Baixa e filtra a base RF em streaming: `curl | funzip | iconv | grep -E CNAE 46-50 | grep -E UF PR|SC` — persiste apenas `estab_pr_sc.csv` (resume-safe, `Ctrl+C` preserva progresso) + 10 zips de `Empresas` em `~/.cache/cnpj_rfb/`.
+- Constrói **DuckDB local** (`cnpj.db`, `SET threads=4`, `memory_limit='2GB'`, índices em `cnpj_basico`) e executa busca SQL + filtro de capital em Python, retornando **Top 15** ranqueados por capital (`src/buscador_importadores.py:345`).
+
+**2. Enriquecimento (`src/site_contacts.py:544`) — Crawling inteligente**
+- Para cada lead, tenta `sitemap.xml` → fila prioritária (contato, sobre, equipe, etc. — 28 caminhos) → crawl paralelo (`ThreadPoolExecutor 5`, `MAX_PAGINAS=50`, `TIMEOUT=6s`).
+- `PageParser` ( `HTMLParser` + regex) extrai e-mails, telefones BR (com e sem formatação), nomes de pessoas (via `PRIMEIROS_NOMES` + `SOBRENOMES_COMUNS`), cargos, CNPJs, e redes sociais (LinkedIn company/pessoa, Instagram, Facebook, YouTube, WhatsApp, Telegram), com heurísticas para evitar falsos positivos (cidades, jargão logístico, navegação).
+- Consulta CNPJ encontrado na API mock e retorna `Resultado` tipado (`@dataclass`) com `paginas_visitadas`, `sitemap_usado` e listas normalizadas — pronto para webhook.
+
+**Resultado:** de 3 CNPJs → 12–15 leads similares em PR/SC na mesma ordem de grandeza de capital, cada um já com site varrido e contatos prontos para abordagem — sem planilha manual, sem polling, e com cache local reutilizável entre execuções.
 
 ## Demo
 
