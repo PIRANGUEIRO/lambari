@@ -1,0 +1,17 @@
+{
+  "ref": [
+    {"cnpj": "11378117000120", "cnpj_fmt": "11.378.117/0001-20", "razao": "EXEMPLO IMPORTACAO LTDA", "uf": "PR", "cidade": "Curitiba", "cnae": "4693100", "capital": 500000.0, "porte": "Demais"},
+    {"cnpj": "33000167000101", "cnpj_fmt": "33.000.167/0001-01", "razao": "EXEMPLO COMERCIO EXTERIOR SA", "uf": "SC", "cidade": "Itajai", "cnae": "4681805", "capital": 800000.0, "porte": "05"},
+    {"cnpj": "27865757000102", "cnpj_fmt": "27.865.757/0001-02", "razao": "EXEMPLO LOGISTICA EIRELI", "uf": "PR", "cidade": "Paranagua", "cnae": "5250805", "capital": 300000.0, "porte": "01"}
+  ],
+  "res": [
+    {"cnpj": "12345678000190", "cnpj_fmt": "12.345.678/0001-90", "razao": "ALVO LOGISTICA LTDA", "uf": "PR/SC", "cidade": "Itajai", "cnae": "4681805", "capital": 420000.0, "porte": "05"},
+    {"cnpj": "98765432000199", "cnpj_fmt": "98.765.432/0001-99", "razao": "ALVO IMPORTADORA SA", "uf": "PR/SC", "cidade": "Curitiba", "cnae": "4693100", "capital": 600000.0, "porte": "Demais"}
+  ],
+  "meta": {
+    "media_capital": 533333.33,
+    "faixa": [160000.0, 1600000.0],
+    "cnae_alvo": "46",
+    "limite": 15
+  }
+}

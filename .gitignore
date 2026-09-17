@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+*.egg-info/
+dist/
+build/
+
+# Env & secrets
+.env
+*.tokens.json
+.rdstation_tokens.json
+~/.rdstation_tokens.json
+
+# Data cache (Receita Federal)
+.cache/
+*.db
+*.csv
+*.zip
+cnpj.db
+estab_pr_sc.csv
+empresas_zips/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

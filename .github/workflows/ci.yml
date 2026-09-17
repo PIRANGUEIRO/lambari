@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Compile
+        run: python -m py_compile src/buscador_importadores.py src/site_contacts.py src/auth/*.py
+      - name: Secret scan
+        run: |
+          ! grep -r "fafd3f86" src/ --include="*.py" || (echo "Secret found!" && exit 1)
+          ! grep -rn 'CLIENT_SECRET\s*=\s*"' src/ --include="*.py" | grep -v "os.getenv" | grep -v "seu_client" || (echo "Hardcoded secret?" && exit 1)
+          echo "No hardcoded secrets"
+      - name: Import smoke
+        run: |
+          python -c "import src.buscador_importadores; print('buscador ok')"
+          python -c "import src.site_contacts; print('site_contacts ok')"

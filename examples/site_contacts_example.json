@@ -1,0 +1,12 @@
+{
+  "url": "https://exemplo.com.br",
+  "dominio": "exemplo.com.br",
+  "paginas_visitadas": 12,
+  "emails": ["contato@exemplo.com.br", "comercial@exemplo.com.br"],
+  "telefones": ["41987654321"],
+  "pessoas": [{"nome": "Joao Silva", "cargo": "Gerente"}],
+  "cnpjs": ["12.345.678/0001-90"],
+  "cnpj_dados": {"nome": "EXEMPLO LTDA", "fantasia": "Exemplo", "situacao": "ATIVA"},
+  "linkedin_empresa": "https://linkedin.com/company/exemplo",
+  "sitemap_usado": true
+}
