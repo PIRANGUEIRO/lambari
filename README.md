@@ -1,8 +1,11 @@
 # Lambari
 
-[![CI](https://github.com/PIRANGUEIRO/lambari/actions/workflows/ci.yml/badge.svg)](https://github.com/PIRANGUEIRO/lambari/actions) ![Python](https://img.shields.io/badge/python-3.10%2B-blue) ![License](https://img.shields.io/badge/license-MIT-blue)
+[![CI](https://github.com/PIRANGUEIRO/lambari/actions/workflows/ci.yml/badge.svg)](https://github.com/PIRANGUEIRO/lambari/actions) ![Python](https://img.shields.io/badge/python-3.10%2B-blue) ![License](https://img.shields.io/badge/license-MIT-blue) ![Status](https://img.shields.io/badge/status-WIP-orange) ![Version](https://img.shields.io/badge/version-v0.9--beta-yellow)
 
 > Gerador de leads B2B — encontra importadores similares em PR/SC a partir de CNPJs de referência usando dados abertos da Receita Federal + enriquecimento de contatos via crawl.
+
+> 🚧 **Projeto em desenvolvimento (WIP) — não está finalizado**  
+> Pipeline funcional em modo demo (prints em `docs/images/`, APIs `api.exemplo.com` mock), mas sem testes automatizados, sem parametrização completa de UF/CNAE e sem deploy em produção. Uso real requer configurar `.env` com endpoints reais e validar resultados. Veja `## Limitations` e `## Roadmap`.
 
 ## Overview
 
