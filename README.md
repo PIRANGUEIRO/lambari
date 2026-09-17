@@ -9,12 +9,21 @@
 **Problema:** empresas de comércio exterior precisam descobrir novos importadores com perfil similar a clientes existentes, mas as bases públicas da Receita Federal (6.5GB, +50M estabelecimentos) são difíceis de filtrar e os sites das empresas não têm contato estruturado.
 
 **Solução:** pipeline em duas etapas:
-1. **Buscador** (`buscador_importadores.py`) — calcula perfil (capital social médio + CNAE) de 3 CNPJs de referência via OpenCNPJ e filtra a base RF local (DuckDB) por CNAE 46–50, UF PR/SC, situação ativa e faixa de capital ±70%.
+1. **Buscador** (`buscador_importadores.py`) — calcula perfil (capital social médio + CNAE) de 3 CNPJs de referência via API mock (api.exemplo.com) e filtra a base RF local (DuckDB) por CNAE 46–50, UF PR/SC, situação ativa e faixa de capital ±70%.
 2. **Enriquecimento** (`site_contacts.py`) — crawl paralelo (sitemap + 50 páginas) extrai e-mails, telefones, pessoas, cargos, CNPJ e redes sociais do site de cada lead.
 
 Orquestrado via **n8n workflow** (`bnsuP7NDtBvl8HU9`) exposto como webhook, alimentando o pipeline BotCotation → Google Sheets / RD Station CRM.
 
 ## Demo
+
+Interface web demo (Lambari B2B Lead Intelligence):
+
+| Buscador | Extração de Contatos | Pipeline n8n |
+|---|---|---|
+| ![Buscador](docs/images/buscador.png) | ![Contatos](docs/images/contatos.png) | ![Pipeline](docs/images/pipeline.png) |
+
+> **Interface:** Buscador (3 CNPJs → perfil + Top 15), Extração de Contatos (8 e-mails / 5 telefones / 6 pessoas em 34 páginas), Pipeline n8n (3 → 15 leads via DuckDB).
+> Prints em `docs/images/` — modo demo local com dados mock.
 
 ```bash
 # 1. Perfil apenas (sem baixar 6.5GB) — resposta instantânea
@@ -30,7 +39,7 @@ python -m src.buscador_importadores 11378117000120 33000167000101 27865757000102
 python -m src.site_contacts https://exemplo.com.br --json > lead.json
 ```
 
-Saída do buscador:
+Saída do buscador (CLI):
 ```
 ======================================================================
   EMPRESAS DE REFERENCIA
@@ -68,7 +77,7 @@ Saída do buscador:
 flowchart LR
     A[3 CNPJs referência] --> B[API Exemplo<br/>CNPJ_API_URL]
     B --> C{Perfil: capital médio + CNAE top}
-    C --> D[(Base RF - Casa dos Dados)]
+    C --> D[(Base RF<br/>api.exemplo.com)]
     D -->|stream grep CNAE 46-50 + UF PR/SC| E[Cache estab_pr_sc.csv]
     D -->|download 10 zips| F[Cache empresas_zips]
     E --> G[DuckDB cnpj.db]
