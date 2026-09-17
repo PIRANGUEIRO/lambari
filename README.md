@@ -1,6 +1,7 @@
 # Lambari
 
 [![CI](https://github.com/PIRANGUEIRO/lambari/actions/workflows/ci.yml/badge.svg)](https://github.com/PIRANGUEIRO/lambari/actions) ![Python](https://img.shields.io/badge/python-3.10%2B-blue) ![License](https://img.shields.io/badge/license-MIT-blue) ![Status](https://img.shields.io/badge/status-WIP-orange) ![Version](https://img.shields.io/badge/version-v0.9--beta-yellow)
+![Python](https://img.shields.io/badge/Python-3.11-3776AB) ![Shell](https://img.shields.io/badge/Shell-bash-89E051) ![SQL](https://img.shields.io/badge/SQL-DuckDB-4479A1) ![Markdown](https://img.shields.io/badge/Markdown-docs-lightgrey)
 
 > Gerador de leads B2B — encontra importadores similares em PR/SC a partir de CNPJs de referência usando dados abertos da Receita Federal + enriquecimento de contatos via crawl.
 
