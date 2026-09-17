@@ -97,18 +97,18 @@ Saída do buscador (CLI):
 
 ```mermaid
 flowchart LR
-    A[3 CNPJs referência] --> B[API Exemplo<br/>CNPJ_API_URL]
-    B --> C{Perfil: capital médio + CNAE top}
-    C --> D[(Base RF<br/>api.exemplo.com)]
-    D -->|stream grep CNAE 46-50 + UF PR/SC| E[Cache estab_pr_sc.csv]
-    D -->|download 10 zips| F[Cache empresas_zips]
-    E --> G[DuckDB cnpj.db]
+    A["3 CNPJs referencia"] --> B["API Exemplo"]
+    B --> C{"Perfil - capital medio + CNAE top"}
+    C --> D["Base RF - api.exemplo.com"]
+    D --> E["Cache estab_pr_sc.csv"]
+    D --> F["Cache empresas_zips"]
+    E --> G["DuckDB cnpj.db"]
     F --> G
-    G -->|faixa cap ±70%| H[Top 15 similares]
-    H --> I[site_contacts.py]
-    I -->|sitemap + crawl 50 págs| J[Contatos enriquecidos]
-    J --> K{n8n Webhook}
-    K --> L[Google Sheets / RD CRM]
+    G --> H["Top 15 similares"]
+    H --> I["site_contacts.py"]
+    I --> J["Contatos enriquecidos"]
+    J --> K{"n8n Webhook"}
+    K --> L["Sheets / RD CRM"]
 ```
 
 **Componentes:** `src/buscador_importadores.py:121` (perfil), `src/buscador_importadores.py:211` (stream), `src/buscador_importadores.py:268` (DuckDB), `src/buscador_importadores.py:345` (busca), `src/site_contacts.py:544` (crawler), `src/auth/` (OAuth RD Station). Ver `docs/architecture.md` para detalhes.

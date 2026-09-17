@@ -8,16 +8,16 @@ Pipeline B2B de geração e enriquecimento de leads de importadores.
 
 ```mermaid
 flowchart TD
-    A[Input: 3 CNPJs] --> B[calcular_perfil\nAPI CNPJ (mock)]
-    B --> C[Baixar base RF\nAPI Dados (mock)]
-    C --> D[Filtrar PR/SC + CNAE 46-50\nstream grep]
-    D --> E[DuckDB cnpj.db\n+ índices]
-    E --> F[buscar\nfaixa capital 0.3-3.0x]
-    F --> G[Top 15 similares]
-    G --> H[site_contacts\n sitemap + crawl 50 págs]
-    H --> I[Emails, telefones, pessoas, redes]
-    I --> J[n8n webhook]
-    J --> K[Sheets / RD CRM]
+    A["Input - 3 CNPJs"] --> B["calcular_perfil - API CNPJ (mock)"]
+    B --> C["Baixar base RF - API Dados (mock)"]
+    C --> D["Filtrar PR/SC + CNAE 46-50 - stream grep"]
+    D --> E["DuckDB cnpj.db"]
+    E --> F["buscar - faixa capital 0.3-3.0x"]
+    F --> G["Top 15 similares"]
+    G --> H["site_contacts - sitemap + crawl"]
+    H --> I["Emails, telefones, pessoas, redes"]
+    I --> J["n8n webhook"]
+    J --> K["Sheets / RD CRM"]
 ```
 
 ## Componentes
