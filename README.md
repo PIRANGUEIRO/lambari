@@ -18,12 +18,14 @@ Orquestrado via **n8n workflow** (`bnsuP7NDtBvl8HU9`) exposto como webhook, alim
 
 Interface web demo (Lambari B2B Lead Intelligence):
 
-| Buscador | Extração de Contatos | Pipeline n8n |
-|---|---|---|
-| ![Buscador](docs/images/buscador.png) | ![Contatos](docs/images/contatos.png) | ![Pipeline](docs/images/pipeline.png) |
+### Buscador — 3 CNPJs → perfil + Top 15 similares
+<img src="docs/images/buscador.png" width="100%" alt="Buscador de Importadores">
 
-> **Interface:** Buscador (3 CNPJs → perfil + Top 15), Extração de Contatos (8 e-mails / 5 telefones / 6 pessoas em 34 páginas), Pipeline n8n (3 → 15 leads via DuckDB).
-> Prints em `docs/images/` — modo demo local com dados mock.
+### Extração de Contatos — 8 e-mails / 5 telefones / 6 pessoas em 34 páginas
+<img src="docs/images/contatos.png" width="100%" alt="Extração de Contatos">
+
+### Pipeline n8n — 3 → 15 leads via DuckDB
+<img src="docs/images/pipeline.png" width="100%" alt="Pipeline n8n">
 
 ```bash
 # 1. Perfil apenas (sem baixar 6.5GB) — resposta instantânea
